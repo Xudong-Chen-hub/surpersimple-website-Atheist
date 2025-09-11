@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D正方体交互效果</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cube: {
+                            front: '#3B82F6',
+                            back: '#10B981',
+                            left: '#F59E0B',
+                            right: '#EF4444',
+                            top: '#8B5CF6',
+                            bottom: '#EC4899'
+                        }
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .preserve-3d {
+                transform-style: preserve-3d;
+            }
+            .backface-hidden {
+                backface-visibility: hidden;
+            }
+            .perspective {
+                perspective: 1000px;
+            }
+            .cube-shadow {
+                box-shadow: 0 0 30px rgba(0, 0, 0, 0.3) inset, 
+                            0 0 20px rgba(0, 0, 0, 0.2);
+            }
+            .env-gradient {
+                background: linear-gradient(135deg, #1a2a6c 0%, #b21f1f 50%, #fdbb2d 100%);
+            }
+        }
+    </style>
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* 正方体容器 */
+        .cube-container {
+            position: relative;
+            width: 100%;
+            height: 70vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .cube {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            transform-style: preserve-3d;
+            transition: transform 0.2s ease-out;
+            cursor: grab;
+        }
+        
+        .cube:active {
+            cursor: grabbing;
+        }
+        
+        /* 正方体的6个面 */
+        .cube div {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            backface-visibility: hidden;
+            transition: all 0.3s ease;
+            background-size: 100% 100%;
+            background-blend-mode: overlay;
+        }
+        
+        /* 面的图标样式 */
+        .cube div i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* 前面 */
+        .front {
+            background-color: theme('colors.cube.front');
+            background-image: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 60%);
+            transform: translateZ(125px);
+        }
+        
+        /* 后面 */
+        .back {
+            background-color: theme('colors.cube.back');
+            background-image: radial-gradient(circle at 70% 70%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 60%);
+            transform: translateZ(-125px) rotateY(180deg);
+        }
+        
+        /* 左面 */
+        .left {
+            background-color: theme('colors.cube.left');
+            background-image: radial-gradient(circle at 30% 70%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 60%);
+            transform: rotateY(-90deg) translateZ(125px);
+        }
+        
+        /* 右面 */
+        .right {
+            background-color: theme('colors.cube.right');
+            background-image: radial-gradient(circle at 70% 30%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 60%);
+            transform: rotateY(90deg) translateZ(125px);
+        }
+        
+        /* 上面 */
+        .top {
+            background-color: theme('colors.cube.top');
+            background-image: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 60%);
+            transform: rotateX(90deg) translateZ(125px);
+        }
+        
+        /* 下面 */
+        .bottom {
+            background-color: theme('colors.cube.bottom');
+            background-image: radial-gradient(circle at 70% 70%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 60%);
+            transform: rotateX(-90deg) translateZ(125px);
+        }
+        
+        /* 悬浮效果 */
+        .cube:hover div {
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
+            opacity: 0.9;
+        }
+        
+        /* 底座效果 */
+        .cube-base {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            transform: translateY(125px) rotateX(90deg);
+            filter: blur(20px);
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 12px 20px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 15px;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .control-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #333;
+            padding: 6px 12px;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+        }
+        
+        .control-btn:hover {
+            background: #f0f0f0;
+        }
+        
+        .control-btn.active {
+            background: #3B82F6;
+            color: white;
+        }
+        
+        .info {
+            text-align: center;
+            color: white;
+            padding: 20px;
+            font-family: 'Inter', sans-serif;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .info h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .info p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body class="env-gradient">
+    <div class="info">
+        <h1>3D 正方体交互演示</h1>
+        <p>拖动鼠标可旋转正方体，点击按钮可切换预设视角</p>
+    </div>
+    
+    <div class="cube-container perspective">
+        <div class="cube" id="cube">
+            <div class="front cube-shadow">
+                <i class="fa fa-arrow-up"></i>
+                <span>前面</span>
+            </div>
+            <div class="back cube-shadow">
+                <i class="fa fa-arrow-down"></i>
+                <span>后面</span>
+            </div>
+            <div class="left cube-shadow">
+                <i class="fa fa-arrow-left"></i>
+                <span>左面</span>
+            </div>
+            <div class="right cube-shadow">
+                <i class="fa fa-arrow-right"></i>
+                <span>右面</span>
+            </div>
+            <div class="top cube-shadow">
+                <i class="fa fa-arrow-up"></i>
+                <span>上面</span>
+            </div>
+            <div class="bottom cube-shadow">
+                <i class="fa fa-arrow-down"></i>
+                <span>下面</span>
+            </div>
+        </div>
+        <div class="cube-base"></div>
+    </div>
+    
+    <div class="controls">
+        <button class="control-btn active" data-view="default">默认视角</button>
+        <button class="control-btn" data-view="front">正前方</button>
+        <button class="control-btn" data-view="top">正上方</button>
+        <button class="control-btn" data-view="side">侧面</button>
+        <button class="control-btn" data-view="random">随机视角</button>
+    </div>
+
+    <script>
+        const cube = document.getElementById('cube');
+        const controlButtons = document.querySelectorAll('.control-btn');
+        
+        // 初始旋转角度
+        let rotateX = 20;
+        let rotateY = 45;
+        let isDragging = false;
+        let startX, startY;
+        let currentX, currentY;
+        let sensitivity = 0.5;
+        
+        // 更新立方体旋转
+        function updateRotation() {
+            cube.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        }
+        
+        // 初始旋转
+        updateRotation();
+        
+        // 鼠标按下事件
+        cube.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            cube.style.transition = 'none'; // 拖动时关闭过渡，使旋转更流畅
+        });
+        
+        // 鼠标移动事件
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            
+            currentX = e.clientX;
+            currentY = e.clientY;
+            
+            // 计算旋转差异
+            const diffX = currentX - startX;
+            const diffY = currentY - startY;
+            
+            // 更新旋转角度
+            rotateY += diffX * sensitivity;
+            rotateX -= diffY * sensitivity; // 注意这里是减号，使旋转方向更自然
+            
+            // 更新起始位置
+            startX = currentX;
+            startY = currentY;
+            
+            // 应用旋转
+            updateRotation();
+        });
+        
+        // 鼠标释放事件
+        document.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                cube.style.transition = 'transform 0.2s ease-out'; // 释放时恢复过渡效果
+            }
+        });
+        
+        // 鼠标离开窗口事件
+        document.addEventListener('mouseleave', () => {
+            if (isDragging) {
+                isDragging = false;
+                cube.style.transition = 'transform 0.2s ease-out';
+            }
+        });
+        
+        // 触摸设备支持
+        cube.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            cube.style.transition = 'none';
+        });
+        
+        document.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault(); // 防止页面滚动
+            
+            currentX = e.touches[0].clientX;
+            currentY = e.touches[0].clientY;
+            
+            const diffX = currentX - startX;
+            const diffY = currentY - startY;
+            
+            rotateY += diffX * sensitivity;
+            rotateX -= diffY * sensitivity;
+            
+            startX = currentX;
+            startY = currentY;
+            
+            updateRotation();
+        });
+        
+        document.addEventListener('touchend', () => {
+            if (isDragging) {
+                isDragging = false;
+                cube.style.transition = 'transform 0.2s ease-out';
+            }
+        });
+        
+        // 视角控制按钮
+        controlButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // 移除所有按钮的active类
+                controlButtons.forEach(btn => btn.classList.remove('active'));
+                // 给当前点击的按钮添加active类
+                button.classList.add('active');
+                
+                cube.style.transition = 'transform 0.5s ease';
+                
+                // 根据按钮数据设置不同视角
+                switch(button.dataset.view) {
+                    case 'default':
+                        rotateX = 20;
+                        rotateY = 45;
+                        break;
+                    case 'front':
+                        rotateX = 0;s
+                        rotateY = 0;
+                        break;
+                    case 'top':
+                        rotateX = 90;
+                        rotateY = 0;
+                        break;
+                    case 'side':
+                        rotateX = 0;
+                        rotateY = 90;
+                        break;
+                    case 'random':
+                        rotateX = Math.random() * 360;
+                        rotateY = Math.random() * 360;
+                        break;
+                }
+                
+                updateRotation();
+            });
+        });
+    </script>
+</body>
+</html>
