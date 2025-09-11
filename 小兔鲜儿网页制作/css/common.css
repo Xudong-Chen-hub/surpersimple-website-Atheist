@@ -1,0 +1,221 @@
+/* 头尾个界面相同的样式 */
+.wrapper{
+    margin: 0 auto;
+    width: 1240px;
+
+}
+/*快捷导航*/
+.shortcut{
+    height: 52px;
+    background-color: #333;
+}
+.shortcut .wrapper{
+    display: flex;
+    justify-content: flex-end;
+    height: 52px;
+    /* background-color: pink; */
+}
+.shortcut ul{
+    display: flex;
+    line-height: 52px;
+}
+.shortcut ul a{
+    font-size: 14px;
+    color: #333;
+    padding: 0 15px;
+    color: #fff;
+    border-right: 1px solid #999;
+}
+.shortcut li:last-child a{
+    border-right: 0;/*最后一个li标签没有右边距*/
+}
+.shortcut li .iconfont{
+    margin-right: 3px;
+    vertical-align: middle;
+}
+.shortcut li .login{
+    color: rgb(87, 216, 216);
+}
+/*头部区域*/
+.header{
+    margin-top: 22px;
+    margin-bottom: 22px; 
+    height: 88px;
+    display: flex;
+    align-items: center; /*使头部元素垂直居中 */
+    /* background-color: pink; */
+}
+.logo{
+    margin-right: 40px;
+    width: 200px;
+    height: 88px;
+    background-color: skyblue;
+}
+.logo a{
+    display: block;
+    width: 200px;
+    height: 88px;
+    background-size: cover; 
+    background-repeat: no-repeat;
+    background-position: center; /*图片居中显示*/
+    background-image: url(../images/logo.png);
+    font-size: 0;
+}
+/*导航*/
+.nav{
+    margin-top: 0;
+    margin-right: 28px;
+}
+.nav ul{
+    display: flex;
+   
+}
+.nav li{
+    margin-right: 45px;
+}
+.nav li:first-child{
+    margin-left: 0;
+}
+.nav li a{
+    padding: 8px 0; 
+    color: #333; 
+    font-size: 16px;
+    font-weight: 500;
+    /* 初始状态添加透明下划线（与悬浮时样式一致，仅颜色透明） */
+    border-bottom: 2px solid transparent; 
+    /* 将过渡属性放在初始状态，确保“悬浮”和“离开”都有动画 */
+    transition: all 0.3s ease;
+}
+
+.nav li a:hover{
+    transition: all 0.3s ease; 
+    color: #5eb69c;
+    border-bottom: 2px solid #5EB695;
+}
+.search{
+    display: flex;
+    margin-top: 0; 
+    /* margin-left: 45px; */
+    width: 170px;
+    height: 37px;
+    border-bottom: 2px solid #f4f4f4;
+}
+.search .iconfont{
+    color: #ccc;
+    margin-left: 8px;
+    font-size: 18px;
+}
+.search input{
+    /*浏览器优先生效input标签的默认宽度*/
+    /*解决办法：重置input默认宽度，使用width：0*/
+    flex: 1;
+    width: 0;
+    border: none;
+}
+.search input::placeholder{
+    font-size: 16px;
+    color: #ccc;
+}
+.shopping{
+    position: relative;
+    margin-top: 0; 
+    margin-left: 64px;
+}
+.shopping .iconfont{
+   font-size: 34px;
+}
+.shopping i{
+    position: absolute;
+    top:5px;
+    left: 15px;/*使用左对齐防止被撑开*/
+    height: 15px;
+    line-height: 15px;
+    padding: 0 6px;
+    background-color: rgb(232, 98, 98);
+    border-radius: 8px;
+    color: white; 
+    font-size: 12px; 
+}
+/*尾部区域*/
+.footer{
+    height: 580px;
+    background-color: #f5f5f5; 
+}
+.service{
+    padding: 60px 0;
+    height: 178px;
+    border-bottom: 1px solid #e8e8e8;
+}
+.service ul{
+    display: flex;
+    justify-content: space-evenly;
+}
+.service li{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 800;
+    font-size: 32px;
+    width: 190px;
+    height: 58px;
+    background-color: #5EB695;
+}
+.help{
+    display: flex;
+    justify-content: space-between;
+    height: 300px;
+    /* padding-top: 60px; */
+    /* background-color: pink; */
+}
+/*左侧*/
+.help .left{
+    display: flex;
+    padding-top: 60px;
+}
+.help .left dl{
+  margin-right: 84px;
+  
+}
+.help .left dt{
+    margin-bottom: 18px;
+    font-weight: 800;
+}
+.help .left dd{
+    margin-bottom: 10px;
+}
+.help .left dl:last-child{
+    margin-right: 0;
+}
+.help .left dl:first-child{
+    margin-left: 100px;
+}
+/*右侧*/
+.help .right ul{
+    display: flex;
+    margin-right: 140px;
+    margin-top: 30px;
+}
+.help .right li{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 500;
+}
+.help .right img{
+    width: 125px;
+    height: 175px;
+}
+.copyright{
+    /*一套丝滑小连招直接实现垂直居中*/
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.copyright p{
+    color: #a1a1a1;
+    margin-bottom: 10px;
+}
+.copyright a{
+   color: #a1a1a1;
+   margin: 0 1px;
+}

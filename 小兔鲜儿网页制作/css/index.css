@@ -1,0 +1,289 @@
+/*小兔鲜儿特有css*/
+/*banner区域*/
+.banner{
+    height: 500px;
+    background-color: #f5f5f5;
+}
+.banner .wrapper{
+    height: 500px;
+    overflow: hidden;
+    position: relative;
+    background-color: pink;
+}
+.banner .pic{
+    display: flex;
+    /*由于父级宽度不够导致子级被挤小了
+    可以增加子级弹性盒子的宽度来解决*/
+    width: 3720px;
+}
+/*侧导航*/
+.subnav{/*因为在头部区域也使用了nav所以这里要限定区域banner*/
+    position: absolute;
+    width: 250px;
+    height: 500px;
+    left: 0;
+    top: 0;
+    background-color: rgba(0, 0,0,0.3);
+}
+.subnav li{
+    display: flex;
+    justify-content: space-between;
+    height: 50px;
+    line-height: 50px;
+    padding-left: 30px;
+    padding-right: 12px;
+    position: relative;
+    /* background-color: pink; */
+}
+.subnav li a{
+    display: inline-block;/*由于transform需要的是块或者行内块属性，而a默认时行内，
+    但是db会让每一个a单独占用一行，而inline-block可以完美的解决这个问题*/
+    margin-right: 12px;
+} 
+.big{
+    font-size: 16px;
+    margin-right: 5px;
+}
+.subnav a:hover{
+    cursor: pointer;/*悬停时鼠标的样式改变*/
+    transition: all 0.3s;
+    background-color: #5eb69c;
+    border-radius: 3px;
+    transform: scale(1.3);/*扩大1，3倍*/
+}
+/*圆点指示器*/
+.banner ol{
+    position: absolute;
+    display: flex;
+    right: 16px;
+    bottom: 12px;
+}
+.banner ol li{
+    margin-left: 8px;
+    width: 22px;
+    height: 22px;
+    /* background-color: pink; */
+    border-radius: 50%;
+}
+.banner ol i{/*i标签是行内，宽高不生效，需要转显示模式*/
+    width: 14px;
+    height: 14px;
+    display: block;
+    background-color: rgba(255,255,255,0.5);
+    border-radius: 50%;
+    margin: 4px;
+}
+.banner ol .active{
+    background-color: rgba(255,255,255,0.5);
+}
+.banner ol .active i{
+    background-color: #fff;
+}
+.banner ol li:hover{
+    cursor: pointer;
+}
+/*新鲜好物*/
+.title{
+    display: flex;
+    justify-content: space-between;
+    height: 42px;
+    /* background-color: pink; */
+    margin-top: 40px;
+    margin-bottom: 30px;
+}
+.title .left{
+    display: flex;
+    /* align-items: center; */
+}
+.title .left h3{
+    margin-right: 35px;
+    font-size: 30px;
+}
+.title .left p{
+    align-self: flex-end;
+    color: #a1a1a1;
+}
+.title .right{
+   line-height: 42px;/*不是使用align-items: center居中*/
+}
+.bd ul{
+    display: flex;
+     justify-content: space-between;
+}
+.bd li{
+    background-color: #eef9f4;
+    width: 304px;
+    height: 404px; 
+}
+.bd li .txt{
+    text-align: center;  
+}
+.bd li h4{
+    margin-top: 18px;
+    margin-bottom: 8px;
+    font-size: 20px;
+}
+.bd li .red{
+    color: red;
+    font-size: 18px;
+}
+.recommend .bd li {
+    background-color: #fff;
+}
+.rencommed .bd p{
+    color: #A1A1A1;
+}
+/*热门品牌*/
+.brand{
+    overflow: hidden;/*存在外边距塌陷的问题*/
+    height: 468px;
+    margin-top: 60px;
+   background-color: #f5f5f5;
+}
+.brand .bd li{
+    width: 244px;
+    height: 306px;
+}
+.fresh .right{
+    display: flex;
+}
+.fresh .right ul{
+    display: flex;
+    margin-top: 10px;
+    margin-right: 50px;
+}
+.fresh .right ul a {
+    margin-left: 6px;
+    height: 20px;
+    display: block;
+    padding: 0 7px;
+    line-height: 20px;
+    /* background-color: pink; */
+}
+.fresh .right ul li:first-child a {
+    background-color: #5eb69c;
+}
+.content{
+    display: flex;
+    justify-content: space-between;
+}
+.content .left{
+    width: 248px;
+    height: 610px;
+    background-color: pink;
+}
+.content .right{
+    width: 968px;
+    height: 610px;
+    /* background-color: blueviolet; */
+}
+.content .right ul{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+    margin: 0;/*要加padding 0和margin 0不然就会排成三行*/
+}
+.content .right li{
+    position: relative;
+    overflow: hidden;/*为了隐藏绿色的悬停cover*/
+    padding: 10px 21px 0;
+    width: 242px;
+    height: 305px;
+    border: 2px solid skyblue;
+}
+.content .right .pic{
+    width: 200px;
+    height: 180px;
+}
+.content .right .info{
+    margin-top: 14px;
+    margin-bottom: 5px;
+    height: 60px;
+    line-height: 19px;
+}
+.content .right .price{
+    color: red;
+    font-size: 22px;
+}
+.content li .cover{
+    position: absolute;
+    text-align: center;
+    padding-top: 15px;
+    width: 242px;
+    height: 82px;
+    left: 0;
+    /*当鼠标没有悬停时，会向下隐藏*/
+    bottom: -86px;
+    
+    color: #fff;
+    background-color: #00be9a;
+}
+.content  .cover p:nth-child(1){
+    font-size: 18px;
+}
+.content  .cover p:nth-child(2){
+    margin: 3px auto 6px;
+    width: 120px;
+    height: 1px;
+    background-color: rgba(255,255,255,0.1);
+}
+/*鼠标悬停时显示cover*/
+.content .right li:hover .cover{
+    bottom: 0;
+    transition: all 0.4s;
+}   
+.topic{
+    margin-top: 40px;
+}
+.topic .title{
+    margin-top: 100px;
+}
+.topic-bd ul{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 60px;
+}
+.topic-bd li{
+    width: 405px;
+    height: 355px;
+    background-color: pink;
+}
+.topic .pic{
+    position: relative;
+    width: 405px;
+    height: 288px;
+}
+.topic .txt{
+    width: 405px;
+    height: 67px;
+     font-size: 22px;
+    text-align: center;
+    font-weight: 600;
+    line-height: 67px;
+}
+.topic-bd .cover{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    left: 0;
+    bottom: 0;
+    width: 405px;
+    height: 90px;
+    background-image: linear-gradient(180deg,rgba(137,137,137,0.00) 0%,rgba(0,0,0,90)100%);
+}   
+.topic-bd .cover .left{
+    color: #fff;
+    font-size: 18px;
+}
+.topic-bd .cover .right{
+    font-size: 15px;
+    color: red;
+    height: 25px;
+    padding: 0 7px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
