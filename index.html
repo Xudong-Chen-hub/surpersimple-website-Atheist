@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./css/index.css" />
+    <link rel="stylesheet" href="./css/base.css" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <title>个人简洁界面</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img src="" alt="头像" class="image" />
+        <h1></h1>
+        <p class="header-title"></p>
+      </header>
+
+      <main>
+        <section class="introDuction">
+          <h2 class="main-title"></h2>
+          <p></p>
+        </section>
+
+        <section class="skills">
+          <h2 class="main-title"></h2>
+          <div class="skills-list"></div>
+        </section>
+
+        <section class="works element">
+          <h2 class="main-title"></h2>
+          <ul></ul>
+        </section>
+
+        <section class="contact">
+          <h2 class="main-title"></h2>
+          <p></p>
+          <p></p>
+          <p></p>
+        </section>
+      </main>
+
+      <footer>
+        <p></p>
+      </footer>
+    </div>
+
+    <script src="./js/data.js"></script>
+
+    <script>
+      //渲染头像和基本信息
+      document.querySelector(".image").src = personalData.profile.avatar;
+      document.querySelector(".image").alt = personalData.profile.name;
+      document.querySelector("header h1").textContent =
+        personalData.profile.name;
+      document.querySelector("header p").textContent =
+        personalData.profile.title;
+
+      //渲染个人简介
+      document.querySelector(".introDuction .main-title").textContent =
+        personalData.introduction.title;
+      document.querySelector(".introDuction p").textContent =
+        personalData.introduction.content;
+
+      //渲染兴趣爱好
+      //这是一种方法，将标题放到键名里嵌套
+      document.querySelector(".skills .main-title").textContent =
+        personalData.hobbie.title;
+      const skillsList = document.querySelector(".skills .skills-list");
+      personalData.hobbie.hobbies.forEach((hobby) => {
+        const span = document.createElement("span"); //创建新的span元素
+        span.className = "skill-tag";
+        span.textContent = hobby; //将当前遍历到的兴趣爱好文本内容设置到 span 元素中
+        skillsList.appendChild(span); //将创建好的 span 元素添加到 skillsList 容器中
+      });
+
+      //渲染作品列表
+      //这是另一种方式，使用js硬写title
+      document.querySelector(".works .main-title").textContent = "我的作品";
+      const worklist = document.querySelector(".works ul");
+      personalData.works.forEach((work) => {
+        const a = document.createElement("a");
+        const li = document.createElement("li");
+        a.href = work.url;
+        a.target = "_blank";
+        a.textContent = work.title;
+        li.appendChild(a);
+        worklist.appendChild(li);
+      });
+
+      //渲染联系方式
+      document.querySelector(".contact .main-title").textContent =
+        personalData.contact.title;
+
+      document.querySelectorAll(
+        ".contact p"
+      )[0].textContent = `邮箱: ${personalData.contact.email}`;
+      document.querySelectorAll(
+        ".contact p"
+      )[1].textContent = `电话: ${personalData.contact.phone}`;
+      document.querySelectorAll(
+        ".contact p"
+      )[2].textContent = `微信: ${personalData.contact.wechat}`;
+
+      //渲染页脚
+      document.querySelector("footer p").textContent = personalData.footer;
+
+      // 添加入场动画
+      document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(() => {
+          document.querySelector(".works").classList.add("animate-in");
+        }, 300); // 延迟300ms执行
+      });
+    </script>
+  </body>
+</html>
