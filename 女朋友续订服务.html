@@ -1,232 +1,111 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>❤️ 专属服务续订 ❤️</title>
     <style>
-      :root {
-        --primary-pink: #ff758c;
-        --secondary-pink: #ff7eb3;
-        --success-green: #00d2be;
-      }
-
-      body {
-        margin: 0;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-        font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
-        overflow: hidden;
-        touch-action: none;
-        user-select: none;
-      }
-
-      /* 动态背景点缀 */
-      .stars {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 0;
-        pointer-events: none;
-      }
-
-      /* 卡片容器 */
-      .card {
-        background: rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(10px);
-        padding: 40px 30px;
-        border-radius: 24px;
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        z-index: 10;
-        width: 80%;
-        max-width: 400px;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-      }
-
-      h2 {
-        color: #d63384;
-        font-size: 1.4rem;
-        margin-bottom: 30px;
-        line-height: 1.5;
-      }
-
-      .btn-group {
-        position: relative;
-        display: flex;
-        flex-direction: column; /* 移动端纵向排列更显眼 */
-        gap: 20px;
-        align-items: center;
-      }
-
-      button {
-        width: 200px;
-        padding: 15px;
-        font-size: 1.1rem;
-        font-weight: bold;
-        border: none;
-        border-radius: 30px;
-        cursor: pointer;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        box-shadow: 0 8px 15px rgba(214, 51, 132, 0.2);
-        -webkit-tap-highlight-color: transparent;
-      }
-
-      #success-btn {
-        background: linear-gradient(to right, #ff758c 0%, #ff7eb3 100%);
-        color: white;
-        z-index: 1000;
-      }
-
-      #fail-btn {
-        background: #fff;
-        color: #999;
-        font-size: 0.9rem;
-        z-index: 1;
-      }
-
-      /* 爱心动画 */
-      .heart {
-        position: absolute;
-        color: #ff4d6d;
-        font-size: 20px;
-        pointer-events: none;
-        animation: moveUp 1.5s ease-out forwards;
-      }
-
-      @keyframes moveUp {
-        0% {
-          transform: translateY(0) scale(1);
-          opacity: 1;
+        /* 保持之前的样式不变 */
+        :root { --primary-pink: #ff758c; --secondary-pink: #ff7eb3; }
+        body {
+            margin: 0; height: 100vh; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            font-family: sans-serif; overflow: hidden; touch-action: none; user-select: none;
         }
-        100% {
-          transform: translateY(-150px) scale(1.5);
-          opacity: 0;
+        .card {
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px);
+            padding: 40px 30px; border-radius: 24px; text-align: center;
+            z-index: 10; width: 80%; max-width: 400px;
         }
-      }
+        h2 { color: #d63384; font-size: 1.4rem; margin-bottom: 30px; }
+        .btn-group { position: relative; display: flex; flex-direction: column; gap: 20px; align-items: center; }
+        button {
+            width: 200px; padding: 15px; font-size: 1.1rem; font-weight: bold;
+            border: none; border-radius: 30px; cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #success-btn { background: linear-gradient(to right, #ff758c 0%, #ff7eb3 100%); color: white; z-index: 1000; }
+        #fail-btn { background: #fff; color: #999; font-size: 0.9rem; z-index: 1; }
+        .heart { position: absolute; color: #ff4d6d; pointer-events: none; animation: moveUp 1.5s ease-out forwards; }
+        @keyframes moveUp { 
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-150px) scale(1.5); opacity: 0; }
+        }
     </style>
-  </head>
-  <body>
-    <canvas class="stars" id="starCanvas"></canvas>
+</head>
+<body>
 
     <div class="card" id="main-card">
-      <h2 id="status-text">
-        系统检测到，您的“女朋友服务”已过期<br />请及时手动续订 ❤️
-      </h2>
-      <div class="btn-group">
-        <button id="success-btn" onclick="handleSuccess()">永远续订</button>
-        <button id="fail-btn" onclick="handleFail()">狠心退订</button>
-      </div>
+        <h2 id="status-text">宝贝，您的“女朋友服务”已过期<br>请及时手动续订 ❤️</h2>
+        <div class="btn-group">
+            <button id="success-btn" onclick="handleSuccess()">永远续订</button>
+            <button id="fail-btn" onclick="handleFail()">狠心退订</button>
+        </div>
     </div>
 
     <script>
-      let sScale = 1;
-      let fScale = 1;
+        let sScale = 1;
+        let fScale = 1;
 
-      // 1. 拦截返回逻辑
-      history.pushState(null, null, document.URL);
-      window.addEventListener("popstate", function () {
+        // --- 修改部分：定义具名函数以便后续移除 ---
+        function preventBack() {
+            history.pushState(null, null, document.URL);
+            createHeart(window.innerWidth/2, window.innerHeight/2);
+            alert("点一下那个粉色按钮嘛 ~");
+        }
+
+        // 初始化拦截
         history.pushState(null, null, document.URL);
-        createHeart(window.innerWidth / 2, window.innerHeight / 2);
-        alert("点一下那个粉色按钮嘛 ~");
-      });
+        window.addEventListener('popstate', preventBack);
 
-      // 2. 失败按钮：越来越小，并爆出爱心
-      function handleFail() {
-        const sBtn = document.getElementById("success-btn");
-        const fBtn = document.getElementById("fail-btn");
-        const status = document.getElementById("status-text");
+        window.onbeforeunload = function() { return "还没续订呢"; };
+        // --- 修改结束 ---
 
-        sScale += 0.5;
-        fScale *= 0.7;
+        function handleFail() {
+            const sBtn = document.getElementById("success-btn");
+            const fBtn = document.getElementById("fail-btn");
+            const status = document.getElementById("status-text");
 
-        sBtn.style.transform = `scale(${sScale})`;
-        fBtn.style.transform = `scale(${fScale})`;
-        fBtn.style.opacity = fScale + 0.1;
+            sScale += 0.5;
+            fScale *= 0.7;
 
-        // 更改文案
-        if (fScale < 0.6) {
-          status.innerHTML = "不可以退订哦！<br>请重新选择正确选项 🌸";
+            sBtn.style.transform = `scale(${sScale})`;
+            fBtn.style.transform = `scale(${fScale})`;
+
+            if (fScale < 0.6) {
+                status.innerHTML = "不可以退订哦！<br>请重新选择正确选项 🌸";
+            }
+            createHeart(fBtn.getBoundingClientRect().left, fBtn.getBoundingClientRect().top);
         }
 
-        // 每次点击失败都冒出爱心
-        for (let i = 0; i < 5; i++) {
-          setTimeout(
-            () =>
-              createHeart(
-                fBtn.getBoundingClientRect().left + Math.random() * 50,
-                fBtn.getBoundingClientRect().top,
-              ),
-            i * 100,
-          );
-        }
-      }
+        function handleSuccess() {
+            // 核心修复：彻底移除监听和拦截
+            window.removeEventListener('popstate', preventBack);
+            window.onbeforeunload = null;
 
-      // 3. 成功按钮：解开心锁
-      function handleSuccess() {
-        window.onbeforeunload = null;
-        const card = document.getElementById("main-card");
-
-        // 全屏撒花效果
-        card.innerHTML = `
+            const card = document.getElementById('main-card');
+            card.innerHTML = `
                 <h1 style="color:#ff4d6d; font-size: 3rem; margin-bottom:10px;">🌹</h1>
                 <h2 style="color:#ff4d6d;">续订成功！</h2>
-                <p style="color:#666; line-height:1.6;">在今后的生活里<br>该服务将自动为您续费，且无法退订。<br>爱你哟！✨</p>
-                <div style="margin-top:20px; font-size:12px; color:#ccc;">(退出锁定已解除)</div>
+                <p style="color:#666; line-height:1.6;">服务已永久激活。<br>现在点击返回键不会再拦你啦！</p>
             `;
-
-        setInterval(() => {
-          createHeart(
-            Math.random() * window.innerWidth,
-            Math.random() * window.innerHeight,
-          );
-        }, 300);
-      }
-
-      // 生成爱心的函数
-      function createHeart(x, y) {
-        const heart = document.createElement("div");
-        heart.innerHTML = "❤️";
-        heart.className = "heart";
-        heart.style.left = x + "px";
-        heart.style.top = y + "px";
-        document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 1500);
-      }
-
-      // 星空背景绘制
-      const canvas = document.getElementById("starCanvas");
-      const ctx = canvas.getContext("2d");
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      function drawStars() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "white";
-        for (let i = 0; i < 50; i++) {
-          ctx.beginPath();
-          ctx.arc(
-            Math.random() * canvas.width,
-            Math.random() * canvas.height,
-            Math.random() * 2,
-            0,
-            Math.PI * 2,
-          );
-          ctx.fill();
+            
+            // 庆祝撒花
+            setInterval(() => {
+                createHeart(Math.random()*window.innerWidth, Math.random()*window.innerHeight);
+            }, 300);
         }
-      }
-      setInterval(drawStars, 1000);
 
-      // 屏蔽右键
-      document.addEventListener("contextmenu", (e) => e.preventDefault());
+        function createHeart(x, y) {
+            const heart = document.createElement("div");
+            heart.innerHTML = "❤️";
+            heart.className = "heart";
+            heart.style.left = x + "px";
+            heart.style.top = y + "px";
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 1500);
+        }
     </script>
-  </body>
+</body>
 </html>
