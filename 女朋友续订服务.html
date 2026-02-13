@@ -1,112 +1,292 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>❤️ 专属服务续订 ❤️</title>
-    <style>
-        /* 保持之前的样式不变 */
-        :root { --primary-pink: #ff758c; --secondary-pink: #ff7eb3; }
-        body {
-            margin: 0; height: 100vh; display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-            font-family: sans-serif; overflow: hidden; touch-action: none; user-select: none;
-        }
-        .card {
-            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px);
-            padding: 40px 30px; border-radius: 24px; text-align: center;
-            z-index: 10; width: 80%; max-width: 400px;
-        }
-        h2 { color: #d63384; font-size: 1.4rem; margin-bottom: 30px; }
-        .btn-group { position: relative; display: flex; flex-direction: column; gap: 20px; align-items: center; }
-        button {
-            width: 200px; padding: 15px; font-size: 1.1rem; font-weight: bold;
-            border: none; border-radius: 30px; cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        #success-btn { background: linear-gradient(to right, #ff758c 0%, #ff7eb3 100%); color: white; z-index: 1000; }
-        #fail-btn { background: #fff; color: #999; font-size: 0.9rem; z-index: 1; }
-        .heart { position: absolute; color: #ff4d6d; pointer-events: none; animation: moveUp 1.5s ease-out forwards; }
-        @keyframes moveUp { 
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-150px) scale(1.5); opacity: 0; }
-        }
-    </style>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>❤️ 情感续订系统 v3.5 ❤️</title>
 
-    <div class="card" id="main-card">
-        <h2 id="status-text">您的“女朋友服务”已过期<br>请及时手动续订 ❤️</h2>
-        <div class="btn-group">
-            <button id="success-btn" onclick="handleSuccess()">永远续订</button>
-            <button id="fail-btn" onclick="handleFail()">狠心退订</button>
-        </div>
+    <style>
+      :root {
+        --pink-main: #ff6b8a;
+        --pink-light: #ff9a9e;
+        --pink-deep: #ff4d6d;
+        --bg-gradient: linear-gradient(135deg, #fa709a, #fee140);
+        --bg-gradient-calm: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+        --bg-gradient-pressure: linear-gradient(135deg, #ff758c, #ff7eb3);
+        --text-light: #666;
+        --card-bg: rgba(255, 255, 255, 0.88);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+
+      body {
+        background: var(--bg-gradient);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+        overflow: hidden;
+        user-select: none;
+        transition: background 1s ease;
+      }
+
+      #bg-layer {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        overflow: hidden;
+      }
+
+      .bg-particle {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.35;
+        animation: floatBg linear infinite;
+      }
+
+      @keyframes floatBg {
+        from {
+          transform: translateY(0);
+        }
+        to {
+          transform: translateY(-120vh);
+        }
+      }
+
+      .card {
+        position: relative;
+        z-index: 10;
+        width: 92%;
+        max-width: 440px;
+        padding: 42px 32px;
+        background: var(--card-bg);
+        border-radius: 28px;
+        backdrop-filter: blur(14px);
+        box-shadow: 0 24px 48px rgba(0, 0, 0, 0.18);
+        text-align: center;
+        animation: cardEnter 0.6s ease;
+      }
+
+      @keyframes cardEnter {
+        from {
+          opacity: 0;
+          transform: translateY(40px) scale(0.96);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      h2 {
+        font-size: 1.45rem;
+        color: var(--pink-deep);
+        line-height: 1.65;
+        margin: 0 0 34px;
+        min-height: 3.5em;
+      }
+
+      .btn-group {
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+        align-items: center;
+      }
+
+      button {
+        width: 230px;
+        padding: 16px 0;
+        border-radius: 999px;
+        border: none;
+        font-size: 1.05rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition:
+          transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+          opacity 0.3s,
+          box-shadow 0.3s;
+      }
+
+      button:active {
+        transform: scale(0.95);
+      }
+
+      #btn-yes {
+        background: linear-gradient(
+          135deg,
+          var(--pink-main),
+          var(--pink-light)
+        );
+        color: #fff;
+        box-shadow: 0 12px 26px rgba(255, 107, 138, 0.45);
+      }
+
+      #btn-no {
+        background: #f2f2f2;
+        color: #999;
+      }
+
+      .heart {
+        position: fixed;
+        font-size: 20px;
+        pointer-events: none;
+        animation: heartFloat 1.6s ease-out forwards;
+      }
+
+      @keyframes heartFloat {
+        from {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+        to {
+          opacity: 0;
+          transform: translateY(-140px) scale(1.6);
+        }
+      }
+
+      .success h1 {
+        font-size: 3.2rem;
+        margin: 0;
+      }
+
+      .success p {
+        color: var(--text-light);
+        line-height: 1.7;
+        margin-top: 14px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="bg-layer"></div>
+
+    <div class="card" id="app">
+      <h2 id="dialog"></h2>
+      <div class="btn-group">
+        <button id="btn-yes">永久续订</button>
+        <button id="btn-no">狠心退订</button>
+      </div>
     </div>
 
     <script>
-        let sScale = 1;
-        let fScale = 1;
+      const App = {};
 
-        // --- 修改部分：定义具名函数以便后续移除 ---
-        function preventBack() {
-            history.pushState(null, null, document.URL);
-            createHeart(window.innerWidth/2, window.innerHeight/2);
-            alert("点一下那个粉色按钮嘛 ~");
+      App.dom = {
+        root: document.getElementById("app"),
+        dialog: document.getElementById("dialog"),
+        yes: document.getElementById("btn-yes"),
+        no: document.getElementById("btn-no"),
+        bg: document.getElementById("bg-layer"),
+      };
+
+      App.emotion = {
+        rejectCount: 0,
+        intensity() {
+          return Math.min(this.rejectCount, 6);
+        },
+      };
+
+      App.script = {
+        init: "系统检测到您的「女朋友服务」已到期 💔<br>是否继续续订？",
+        negotiation: [
+          "诶？真的不考虑一下嘛 🥺",
+          "小宝再考虑一下嘛，好不好嘛 💕",
+          "再拒绝的话…我会有点难过了",
+        ],
+        pressure: [
+          "已经走到这一步了呢，就续订吧 😳",
+          "退路好像慢慢消失了…",
+          "嘿嘿嘿，现在，好像只剩一个选项啦 ❤️",
+        ],
+        success: "续订成功！<br>服务系统已永久激活 🌹",
+      };
+
+      App.bgParticles = {
+        init() {
+          for (let i = 0; i < 18; i++) {
+            const p = document.createElement("div");
+            p.className = "bg-particle";
+            const size = Math.random() * 120 + 40;
+            p.style.width = size + "px";
+            p.style.height = size + "px";
+            p.style.left = Math.random() * 100 + "%";
+            p.style.top = Math.random() * 100 + "%";
+            p.style.background = "rgba(255,255,255,0.6)";
+            p.style.animationDuration = 20 + Math.random() * 20 + "s";
+            this.bg.appendChild(p);
+          }
+        },
+      };
+
+      App.anim = {
+        heart(x, y) {
+          const h = document.createElement("div");
+          h.className = "heart";
+          h.textContent = "❤️";
+          h.style.left = x + "px";
+          h.style.top = y + "px";
+          document.body.appendChild(h);
+          setTimeout(() => h.remove(), 1600);
+        },
+      };
+
+      App.renderDialog = (t) => (App.dom.dialog.innerHTML = t);
+
+      App.lockRejectButton = function () {
+        const btn = this.dom.no;
+        btn.style.opacity = 0;
+        btn.style.transform = "scale(0)";
+        btn.style.pointerEvents = "none";
+        btn.setAttribute("disabled", "disabled");
+      };
+
+      App.onReject = function () {
+        if (this.emotion.rejectCount >= 6) return;
+
+        this.emotion.rejectCount++;
+        const level = this.emotion.intensity();
+
+        this.dom.yes.style.transform = `scale(${1 + level * 0.22})`;
+
+        this.dom.no.style.transform = `
+          translate(${(Math.random() - 0.5) * 160}px,
+                    ${(Math.random() - 0.5) * 120}px)
+          scale(${1 - level * 0.08})
+        `;
+
+        const r = this.dom.no.getBoundingClientRect();
+        this.anim.heart(r.left + r.width / 2, r.top);
+
+        if (level <= 3) {
+          this.renderDialog(this.script.negotiation[level - 1]);
+        } else {
+          this.renderDialog(this.script.pressure[Math.min(level - 4, 2)]);
         }
 
-        // 初始化拦截
-        history.pushState(null, null, document.URL);
-        window.addEventListener('popstate', preventBack);
+        if (level === 6) this.lockRejectButton();
+      };
 
-        window.onbeforeunload = function() { return "还没续订呢"; };
-        // --- 修改结束 ---
+      App.onAccept = function () {
+        this.dom.root.innerHTML = `
+          <h1>🌹</h1>
+          <h2>${this.script.success}</h2>
+          <p>从现在开始，<br>你就是我的唯一永久专属客户，<br>是被我偏爱的那一个 ❤️</p>
+        `;
+      };
 
-        function handleFail() {
-            const sBtn = document.getElementById("success-btn");
-            const fBtn = document.getElementById("fail-btn");
-            const status = document.getElementById("status-text");
+      App.dom.no.addEventListener("click", () => App.onReject());
+      App.dom.yes.addEventListener("click", () => App.onAccept());
 
-            sScale += 0.5;
-            fScale *= 0.7;
-
-            sBtn.style.transform = `scale(${sScale})`;
-            fBtn.style.transform = `scale(${fScale})`;
-
-            if (fScale < 0.6) {
-                status.innerHTML = "不可以退订哦！<br>请重新选择正确选项 🌸";
-            }
-            createHeart(fBtn.getBoundingClientRect().left, fBtn.getBoundingClientRect().top);
-        }
-
-        function handleSuccess() {
-            // 核心修复：彻底移除监听和拦截
-            window.removeEventListener('popstate', preventBack);
-            window.onbeforeunload = null;
-
-            const card = document.getElementById('main-card');
-            card.innerHTML = `
-                <h1 style="color:#ff4d6d; font-size: 3rem; margin-bottom:10px;">🌹</h1>
-                <h2 style="color:#ff4d6d;">续订成功！</h2>
-                <p style="color:#666; line-height:1.6;">服务已永久激活。<br>现在点击返回键不会再拦你啦！</p>
-            `;
-            
-            // 庆祝撒花
-            setInterval(() => {
-                createHeart(Math.random()*window.innerWidth, Math.random()*window.innerHeight);
-            }, 300);
-        }
-
-        function createHeart(x, y) {
-            const heart = document.createElement("div");
-            heart.innerHTML = "❤️";
-            heart.className = "heart";
-            heart.style.left = x + "px";
-            heart.style.top = y + "px";
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 1500);
-        }
+      App.renderDialog(App.script.init);
     </script>
-</body>
+  </body>
 </html>
-
